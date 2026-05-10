@@ -112,5 +112,5 @@ María López, Alexandra Medina, Sergio Samaniego, Camilo Morales, Hector Beltr�
 Once uploaded to GitHub, use the main repository URL in the presentation:
 
 ```text
-https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+https://github.com/mloptab/resc-ai-ling
 ```
