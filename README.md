@@ -12,9 +12,7 @@ resc-ai-ling/
 │   ├── raw/                  # Original source files
 │   ├── interim/              # Intermediate merged files
 │   └── processed/            # Final cleaned datasets and predictions
-├── notebooks/                # Main project notebooks, ordered by execution
-├── reports/
-│   └── figures/              # Optional exported plots for reports/slides
+├── notebooks/                # Main project notebooks, ordered by execution             
 ├── README.md
 ├── requirements.txt
 └── .gitignore
@@ -109,9 +107,7 @@ Then open the notebooks in order from the `notebooks/` folder.
 
 Project developed for academic purposes at Universitat Politècnica de València.
 
-Add the full team member names here.
-
-## Repository link for the presentation
+María López, Alexandra Medina, Sergio Samaniego, Camilo Morales, Hector Beltrán, Marcos Carrasco
 
 Once uploaded to GitHub, use the main repository URL in the presentation:
 
