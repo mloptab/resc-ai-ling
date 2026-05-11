@@ -35,11 +35,10 @@ This part of the project shows how the trained model can be used beyond the expl
 ```text
 resc-ai-ling/
 ├── data/
-│   ├── raw/          # Original source datasets
-│   ├── interim/      # Intermediate datasets
-│   └── processed/    # Final cleaned datasets
-├── notebooks/        # Data preprocessing, EDA and modelling notebooks
-├── deployment/       # Inference notebook and demo resources
+├── notebooks/
+├── deployment/
+│   ├── DEMO/
+│   └── RESC-AI-LING_Inference_Demo.ipynb
 ├── README.md
 ├── requirements.txt
 └── .gitignore
