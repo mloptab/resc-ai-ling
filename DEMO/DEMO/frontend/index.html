@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RESC-AI-LING · Inference Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="static/style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-mark">R</div>
+        <div>
+          <span class="logo-title">RESC-AI-LING</span>
+          <span class="logo-sub">LLM Inference Demo &middot; Project III</span>
+        </div>
+      </div>
+      <nav class="page-nav">
+        <button class="nav-btn active" data-page="benchmark">
+          <span class="nav-num">01</span> Benchmark Inference
+        </button>
+        <button class="nav-btn" data-page="features">
+          <span class="nav-num nav-num-b">02</span> Features Inference
+        </button>
+      </nav>
+      <div class="status-pill">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusLabel">Connecting…</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════ PAGE 1 — BENCHMARK INFERENCE ══════════════ -->
+  <div class="page active" id="pageBenchmark">
+    <div class="bg-shapes">
+      <div class="bg-shape bg-shape-1"></div>
+      <div class="bg-shape bg-shape-2"></div>
+    </div>
+    <div class="page-layout">
+
+      <!-- INPUT -->
+      <aside class="input-panel">
+        <div class="panel-badge panel-badge-a">01 · Benchmark Inference</div>
+        <h2 class="panel-title">Model Specification</h2>
+        <p class="panel-desc">Structural characteristics of the LLM. The model predicts its benchmark scores.</p>
+
+        <div class="input-stack">
+          <div class="field-block">
+            <label class="field-label">Training FLOPs <span class="hint">e.g. 3e23</span></label>
+            <input id="a_flops" type="text" value="3e23" class="field-input mono" />
+          </div>
+          <div class="field-block">
+            <label class="field-label">Parameters <span class="hint">e.g. 7e9</span></label>
+            <input id="a_params" type="text" value="7e9" class="field-input mono" />
+          </div>
+          <div class="field-block">
+            <label class="field-label">Dataset Size <span class="hint">tokens, e.g. 1e12</span></label>
+            <input id="a_dataset" type="text" value="1e12" class="field-input mono" />
+          </div>
+
+          <div class="field-divider">Architecture</div>
+
+          <div class="field-block">
+            <label class="field-label">Architecture Class</label>
+            <input id="a_arch" type="text" value="Qwen2ForCausalLM" class="field-input mono" />
+            <div class="chip-row">
+              <button class="chip active" data-input="a_arch" data-val="Qwen2ForCausalLM">Qwen2</button>
+              <button class="chip" data-input="a_arch" data-val="LlamaForCausalLM">Llama</button>
+              <button class="chip" data-input="a_arch" data-val="MistralForCausalLM">Mistral</button>
+              <button class="chip" data-input="a_arch" data-val="MixtralForCausalLM">Mixtral</button>
+            </div>
+          </div>
+          <div class="field-block">
+            <label class="field-label">Model Type</label>
+            <select id="a_mtype" class="field-select">
+              <option value="chatmodels">Chat Model</option>
+              <option value="pretrained">Pretrained</option>
+              <option value="fine-tuned">Fine-tuned</option>
+            </select>
+          </div>
+          <div class="field-block">
+            <label class="field-label">Organization</label>
+            <select id="a_org" class="field-select">
+              <option value="Industry">Industry</option>
+              <option value="Academic">Academic</option>
+              <option value="Community">Community</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="run-btn run-btn-a" id="runBenchmarkBtn">
+          <span class="run-icon">▶</span>
+          <span class="run-text">Run Benchmark Inference</span>
+          <span class="run-spinner hidden" id="spinA">↺</span>
+        </button>
+        <div class="inline-error hidden" id="benchmarkError"></div>
+
+        <!-- Sent values debug (shown after run) -->
+        <div class="hidden" id="featBlockA">
+          <div class="field-divider">Sent to API</div>
+          <div class="feat-table" id="featTableA"></div>
+        </div>
+      </aside>
+
+      <!-- OUTPUT -->
+      <div class="output-panel">
+        <div class="output-placeholder" id="benchmarkPlaceholder">
+          <div class="ph-wrap">
+            <div class="ph-ring ph-ring-a">◉</div>
+            <h3>Benchmark Inference</h3>
+            <p>Set the model specification and click <strong>Run</strong> to predict the 6 benchmark scores.</p>
+            <div class="ph-targets">
+              <div class="ph-target"><span class="ph-dot" style="background:#4E79A7"></span>Reasoning</div>
+              <div class="ph-target"><span class="ph-dot" style="background:#59A14F"></span>MuSR</div>
+              <div class="ph-target"><span class="ph-dot" style="background:#F28E2B"></span>CO₂</div>
+              <div class="ph-target"><span class="ph-dot" style="background:#9B59B6"></span>MATH</div>
+              <div class="ph-target"><span class="ph-dot" style="background:#E05C5C"></span>GPQA</div>
+              <div class="ph-target"><span class="ph-dot" style="background:#17BECF"></span>IFEval</div>
+            </div>
+            <p class="ph-models">ElasticNet · RandomForest · GradientBoosting · SVR · HuberRegressor · BayesianRidge</p>
+          </div>
+        </div>
+        <div class="output-loader hidden" id="benchmarkLoader">
+          <div class="loader-ring-spin"></div>
+          <p>Running Benchmark Inference…</p>
+        </div>
+        <div class="output-results hidden" id="benchmarkResults">
+          <div class="results-row">
+            <div class="result-card result-card-radar">
+              <div class="card-title">Ensemble Mean &mdash; Radar Chart <span class="card-note">(normalized to benchmark maximum)</span></div>
+              <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
+            </div>
+            <div class="result-card">
+              <div class="card-title">Ensemble Mean &mdash; All Targets</div>
+              <table class="data-table" id="ensembleTable">
+                <thead><tr><th>Target</th><th>Score</th><th>Max</th><th>%</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="result-card">
+            <div class="card-title">Per-Model Predictions &mdash; All Targets</div>
+            <div class="model-bars-grid" id="modelBarsGrid"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════ PAGE 2 — FEATURES INFERENCE ══════════════ -->
+  <div class="page" id="pageFeatures">
+    <div class="bg-shapes">
+      <div class="bg-shape bg-shape-3"></div>
+      <div class="bg-shape bg-shape-4"></div>
+    </div>
+    <div class="page-layout">
+
+      <!-- INPUT -->
+      <aside class="input-panel">
+        <div class="panel-badge panel-badge-b">02 · Features Inference</div>
+        <h2 class="panel-title">Benchmark Scores</h2>
+        <p class="panel-desc">Enter the 6 benchmark scores to predict the structural characteristics and architecture of the LLM.</p>
+
+        <div class="input-stack">
+          <div class="field-block">
+            <label class="field-label">IFEval <span class="hint">Instruction Following · max 90</span></label>
+            <input id="b_ifeval" type="text" value="55" class="field-input mono" />
+          </div>
+          <div class="field-block">
+            <label class="field-label">BBH <span class="hint">Big-Bench Hard · max 70</span></label>
+            <input id="b_bbh" type="text" value="43" class="field-input mono" />
+          </div>
+          <div class="field-block">
+            <label class="field-label">MATH <span class="hint">Mathematical Reasoning · max 80</span></label>
+            <input id="b_math" type="text" value="30" class="field-input mono" />
+          </div>
+          <div class="field-block">
+            <label class="field-label">GPQA <span class="hint">Graduate Expert · max 60</span></label>
+            <input id="b_gpqa" type="text" value="28" class="field-input mono" />
+          </div>
+          <div class="field-block">
+            <label class="field-label">MuSR <span class="hint">Multi-step Reasoning · max 25</span></label>
+            <input id="b_musr" type="text" value="13.5" class="field-input mono" />
+          </div>
+          <div class="field-block">
+            <label class="field-label">MMLU-Pro <span class="hint">Knowledge · max 70</span></label>
+            <input id="b_mmlu" type="text" value="35" class="field-input mono" />
+          </div>
+        </div>
+
+        <button class="run-btn run-btn-b" id="runFeaturesBtn">
+          <span class="run-icon">▶</span>
+          <span class="run-text">Run Features Inference</span>
+          <span class="run-spinner hidden" id="spinB">↺</span>
+        </button>
+        <div class="inline-error hidden" id="featuresError"></div>
+      </aside>
+
+      <!-- OUTPUT -->
+      <div class="output-panel">
+        <div class="output-placeholder" id="featuresPlaceholder">
+          <div class="ph-wrap">
+            <div class="ph-ring ph-ring-b">◎</div>
+            <h3>Features Inference</h3>
+            <p>Enter the 6 benchmark scores and click <strong>Run</strong> to predict structural characteristics.</p>
+            <div class="ph-targets">
+              <div class="ph-target"><span class="ph-dot" style="background:#4E79A7"></span>Parameters (B)</div>
+              <div class="ph-target"><span class="ph-dot" style="background:#F28E2B"></span>Training FLOPs</div>
+              <div class="ph-target"><span class="ph-dot" style="background:#59A14F"></span>Dataset Size</div>
+              <div class="ph-target"><span class="ph-dot" style="background:#9B59B6"></span>Arch: Qwen2 / Llama</div>
+              <div class="ph-target"><span class="ph-dot" style="background:#17BECF"></span>Type: Chat / Finetune / Pretrained</div>
+            </div>
+            <p class="ph-models">XGBoost MultiOutput Regression · RandomForest MultiOutput Classification</p>
+          </div>
+        </div>
+        <div class="output-loader hidden" id="featuresLoader">
+          <div class="loader-ring-spin loader-ring-b"></div>
+          <p>Running Features Inference…</p>
+        </div>
+        <div class="output-results hidden" id="featuresResults">
+          <div class="result-card">
+            <div class="card-title">Structural Regression &mdash; XGBoost &mdash; 3 Independent Predictors</div>
+            <div class="reg-three-grid" id="regThreeGrid"></div>
+          </div>
+          <div class="result-card">
+            <div class="card-title">Architecture Classification &mdash; RandomForest</div>
+            <div class="clf-grid" id="clfGrid"></div>
+          </div>
+          <div class="result-card">
+            <div class="card-title">Benchmark Scores used as Input</div>
+            <div class="bench-echo-grid" id="benchEchoGrid"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    Universitat Politècnica de València &middot; RESC-AI-LING Project III
+    &nbsp;|&nbsp; Benchmark Inference: ElasticNet · RF · GradientBoosting · SVR · Huber · BayesianRidge
+    &nbsp;|&nbsp; Features Inference: XGBoost · RandomForest
+  </footer>
+
+  <script src="static/app.js"></script>
+</body>
+</html>
