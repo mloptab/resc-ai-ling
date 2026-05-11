@@ -1,0 +1,90 @@
+RESC-AI-LING · Demo App — Jupyter Startup Guide
+================================================
+
+Copy and paste these cells into a Jupyter Notebook to install and launch the app.
+The backend folder must contain the saved_models/ files before running.
+
+
+────────────────────────────────────────────────
+ CELL 1 — Install dependencies (first time only)
+────────────────────────────────────────────────
+
+import sys, os
+
+# Adjust this path to where your DEMO folder is located
+demo_path = "./DEMO"
+
+!{sys.executable} -m pip install -r {demo_path}/requirements.txt -q
+!{sys.executable} -m pip install "uvicorn[standard]" nest_asyncio -q
+print("Done")
+
+
+────────────────────────────────────────────────
+ CELL 2 — Start the server
+────────────────────────────────────────────────
+
+import sys, os, threading, nest_asyncio, uvicorn
+
+# Adjust this path to where your DEMO/backend folder is located
+backend_path = "./DEMO/backend"
+
+os.chdir(os.path.abspath(backend_path))
+sys.path.insert(0, os.path.abspath(backend_path))
+
+nest_asyncio.apply()
+
+threading.Thread(
+    target=lambda: uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=8000,
+        log_level="info",
+    ),
+    daemon=True,
+).start()
+
+print("Server running → http://localhost:8000")
+
+
+────────────────────────────────────────────────
+ CELL 3 — Check models loaded correctly
+────────────────────────────────────────────────
+
+import requests
+
+r = requests.get("http://localhost:8000/health")
+print(r.json())
+
+# Expected output:
+# {
+#   'status': 'ok',
+#   'group_a_targets_loaded': 6,
+#   'group_b_regressors_loaded': 3,
+#   'group_b_classifiers_loaded': 5
+# }
+#
+# If group_a_targets_loaded is 0, the .joblib files
+# are not found. Check that backend_path is correct
+# and that models/ folder contains the saved files.
+
+
+────────────────────────────────────────────────
+ OPEN THE APP
+────────────────────────────────────────────────
+
+Go to:   http://localhost:8000
+
+The server stays alive as long as the notebook
+kernel is running. To stop it, restart the kernel.
+
+
+────────────────────────────────────────────────
+ NOTES
+────────────────────────────────────────────────
+
+· Cell 1 only needs to run once per environment.
+· Every subsequent session only needs Cell 2.
+· If port 8000 is busy, change it to 8001 in
+  Cell 2 and open http://localhost:8001 instead.
+· backend_path can be absolute, e.g.:
+  "C:/Users/yourname/Documents/DEMO/backend"
