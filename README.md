@@ -25,9 +25,11 @@ The objective is to predict benchmark scores without running costly evaluations,
 resc-ai-ling/
 ├── data/
 │   ├── raw/          # Original source datasets
-│   ├── interim/      # Intermediate merged datasets
+│   ├── interim/      # Intermediate datasets
 │   └── processed/    # Final cleaned datasets
-├── notebooks/        # Data processing and modeling notebooks
+├── notebooks/        # Data preprocessing, EDA and modelling notebooks
+├── deployment/       # Inference notebook and demo resources
 ├── README.md
 ├── requirements.txt
 └── .gitignore
+
